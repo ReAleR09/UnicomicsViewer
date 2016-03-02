@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="197dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="EngTitle"
+        android:id="@+id/et_textView"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Title"
+        android:id="@+id/rt_textView"
+        android:layout_marginLeft="0dp"
+        android:layout_below="@+id/et_textView"
+        android:layout_alignParentStart="true"
+        android:layout_row="1"
+        android:layout_column="0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="URL"
+        android:id="@+id/url_textView"
+        android:layout_below="@+id/rt_textView"
+        android:layout_gravity="bottom"
+        android:layout_row="9"
+        android:layout_column="0" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_row="0"
+        android:layout_column="19"
+        android:layout_gravity="top|right"
+        android:layout_marginRight="97dp"
+        android:layout_rowSpan="10" />
+
+</GridLayout>

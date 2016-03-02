@@ -1,5 +1,7 @@
 package com.example.notimportant.unicomicsviewer.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,16 +19,27 @@ import org.jsoup.select.Elements;
 
 import com.example.notimportant.unicomicsviewer.POJO.Series;
 import com.example.notimportant.unicomicsviewer.R;
+import com.example.notimportant.unicomicsviewer.adapter.SeriesAdapter;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<String> seriesList;
+    private static ArrayList<Series> seriesList;
+
+    private ListView seriesListView;
+
+    private static SeriesAdapter seriesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        seriesList = new ArrayList<>();
+        seriesList = new ArrayList<Series>();
+        seriesListView = (ListView) findViewById(R.id.listView);
 
         new Parsing().execute();
 
@@ -55,13 +70,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... arg) {
             Document doc;
-            seriesList.clear();
             try {
                 doc = Jsoup.connect(PAGE_URL).get();
                 //получаем строчку с вызовом скрипта генерации пагинации
                 Element pag = doc.getElementsByClass("pagination").first().getElementsByTag("script").first();
                 String pagination = pag.data();
-                Log.d("TEST", pagination);
+                //Log.d("TEST", pagination);
                 //получаем количество страниц
                 Pattern tp = Pattern.compile("^.*?', (.*?), .*$");
                 Matcher tm = tp.matcher(pagination);
@@ -75,16 +89,19 @@ public class MainActivity extends AppCompatActivity {
                         series_page = Jsoup.connect(PAGE_URL + "/page/" + i).get();
 
                         Elements series_element = series_page.getElementsByClass("list_series");
-                        ArrayList<Series> seriesList = new ArrayList<>();
+                        seriesList = new ArrayList<>();
                         for(Element serie_element : series_element){
                             //получаем тайтл, ссылки на серию и превью обложки
                             String thumbURL = serie_element.getElementsByTag("img").first().attr("src");
                             String title = serie_element.getElementsByClass("list_h").first().text();
                             String seriesURL = serie_element.getElementsByClass("list_h").first().attr("href");
-                            Log.d("TEST", "\t" + title + "; URL=" + seriesURL + "; thumbURL=" + thumbURL);
+                            Log.d("TEST", thumbURL);
+
+                            Series serie = new Series(title, "blah-blah", thumbURL, seriesURL);
+
                             //засовываем в лист
-                            seriesList.add(new Series(title, "blah-blah", thumbURL, seriesURL));
-                            Log.d("TEST", "____________________");
+                            seriesList.add(serie);
+                            //Log.d("TEST", "____________________");
                         }
 
                     } catch (IOException e) {
@@ -102,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             //привязать адаптер к листу
+            Log.d("TEST", "Сбор окончен");
+            seriesAdapter = new SeriesAdapter(getApplicationContext(), seriesList);
+            seriesListView.setAdapter(seriesAdapter);
         }
+    }
+
+    public static void refresh(){
+        seriesAdapter.notifyDataSetChanged();
     }
 }

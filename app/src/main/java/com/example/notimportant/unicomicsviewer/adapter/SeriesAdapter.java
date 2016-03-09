@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.notimportant.unicomicsviewer.POJO.Series;
 import com.example.notimportant.unicomicsviewer.R;
 import com.example.notimportant.unicomicsviewer.activity.MainActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -64,20 +65,18 @@ public class SeriesAdapter extends BaseAdapter{
 
         final Series series = (Series) getSeries(position);
 
-        TextView eng_title = (TextView) view.findViewById(R.id.et_textView);
-        eng_title.setText(series.getEngTitle());
-
         TextView ru_title = (TextView) view.findViewById(R.id.rt_textView);
         ru_title.setText(series.getTitle());
 
-        TextView url_textview = (TextView) view.findViewById(R.id.url_textView);
-        url_textview.setText(series.getSeriesURL());
+//        TextView eng_title = (TextView) view.findViewById(R.id.et_textView);
+//        eng_title.setText(series.getEngTitle());
 
-        ImageView thumbImage = (ImageView) view.findViewById(R.id.imageView);
-        thumbImage.setImageURI(Uri.parse(series.getThumbURL()));
-        thumbImage.setScaleType(ImageView.ScaleType.CENTER);
-        thumbImage.setBa
+//        TextView url_textview = (TextView) view.findViewById(R.id.url_textView);
+//        url_textview.setText(series.getSeriesURL());
 
+        //ОТОБРАЖАЕМ КАРТИНКУ? ЕЕЕЕ
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        ImageLoader.getInstance().displayImage(series.getThumbURL(), imageView);
 
         return view;
     }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.jsoup.Jsoup;
@@ -20,6 +21,9 @@ import org.jsoup.select.Elements;
 import com.example.notimportant.unicomicsviewer.POJO.Series;
 import com.example.notimportant.unicomicsviewer.R;
 import com.example.notimportant.unicomicsviewer.adapter.SeriesAdapter;
+import com.example.notimportant.unicomicsviewer.parsing.SeriesParser;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -44,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Подключаем подгрузчик картинок
+        ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(config);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,73 +67,18 @@ public class MainActivity extends AppCompatActivity {
 
         seriesList = new ArrayList<Series>();
         seriesListView = (ListView) findViewById(R.id.listView);
-
-        new Parsing().execute();
-
-    }
-
-    private class Parsing extends AsyncTask<String, Void, String> {
-        String PAGE_URL = "http://unicomics.ru/comics/series";
-
-        @Override
-        protected String doInBackground(String... arg) {
-            Document doc;
-            try {
-                doc = Jsoup.connect(PAGE_URL).get();
-                //получаем строчку с вызовом скрипта генерации пагинации
-                Element pag = doc.getElementsByClass("pagination").first().getElementsByTag("script").first();
-                String pagination = pag.data();
-                //Log.d("TEST", pagination);
-                //получаем количество страниц
-                Pattern tp = Pattern.compile("^.*?', (.*?), .*$");
-                Matcher tm = tp.matcher(pagination);
-                tm.find();
-                int page_count = Integer.valueOf(tm.group(1));
-
-                //проходимся по всем страницам
-                for(int i = 1; i <= page_count; i++){
-                    Document series_page;
-                    try {
-                        series_page = Jsoup.connect(PAGE_URL + "/page/" + i).get();
-
-                        Elements series_element = series_page.getElementsByClass("list_series");
-                        seriesList = new ArrayList<>();
-                        for(Element serie_element : series_element){
-                            //получаем тайтл, ссылки на серию и превью обложки
-                            String thumbURL = serie_element.getElementsByTag("img").first().attr("src");
-                            String title = serie_element.getElementsByClass("list_h").first().text();
-                            String seriesURL = serie_element.getElementsByClass("list_h").first().attr("href");
-                            Log.d("TEST", thumbURL);
-
-                            Series serie = new Series(title, "blah-blah", thumbURL, seriesURL);
-
-                            //засовываем в лист
-                            seriesList.add(serie);
-                            //Log.d("TEST", "____________________");
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        seriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO
+                //Он айтем клик, открывать окошко с описанием Серии и списком выпусков
             }
-            return null;
-        }
+        });
 
-        @Override
-        protected void onPostExecute(String result) {
-            //привязать адаптер к листу
-            Log.d("TEST", "Сбор окончен");
-            seriesAdapter = new SeriesAdapter(getApplicationContext(), seriesList);
-            seriesListView.setAdapter(seriesAdapter);
-        }
+        SeriesParser seriesParser = new SeriesParser(seriesList, seriesAdapter, seriesListView, getApplicationContext());
+        seriesParser.run();
+
     }
 
-    public static void refresh(){
-        seriesAdapter.notifyDataSetChanged();
-    }
+
 }

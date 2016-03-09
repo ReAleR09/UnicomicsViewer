@@ -2,6 +2,7 @@ package com.example.notimportant.unicomicsviewer.parsing;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -41,7 +42,7 @@ public class SeriesParser{
     }
 
 
-    private class Parsing extends AsyncTask<String, Void, String> {
+    private class Parsing extends AsyncTask<String, Series, String> {
         String PAGE_URL = "http://unicomics.ru/comics/series";
 
         @Override
@@ -79,10 +80,10 @@ public class SeriesParser{
 
                             Series serie = new Series(title, " ", thumbURL, seriesURL);
 
-                            //засовываем в лист
-                            seriesList.add(serie);
                             //TODO
                             //попробвать апдейтить список в прямом эфире seriesAdapter.notifyDataSetChanged();
+                            publishProgress(serie);
+
                         }
 
                     } catch (IOException e) {
@@ -98,11 +99,20 @@ public class SeriesParser{
         }
 
         @Override
+        protected void onProgressUpdate(Series... values) {
+            super.onProgressUpdate(values);
+            //засовываем в лист
+            seriesList.add(values[0]);
+            seriesAdapter.notifyDataSetChanged();
+        }
+
+        @Override
         protected void onPostExecute(String result) {
             //привязать адаптер к листу
             Log.d("TEST", "Сбор окончен");
-            seriesAdapter = new SeriesAdapter(context, seriesList);
-            seriesListView.setAdapter(seriesAdapter);
+            // переехало в onCreate пока что
+            //seriesAdapter = new SeriesAdapter(context, seriesList);
+            //seriesListView.setAdapter(seriesAdapter);
         }
     }
 

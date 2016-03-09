@@ -39,12 +39,11 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static ArrayList<Series> seriesList;
-
-    private ListView seriesListView;
-
-    private static SeriesAdapter seriesAdapter;
-
+    // быдлокодные статики больше не нужны >:-)
+    //private static ArrayList<Series> seriesList;
+    //private ListView seriesListView;
+    //private static SeriesAdapter seriesAdapter;
+    private SeriesAdapter seriesAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
         ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(config);
 
+        //Настраиваем вид Главного Активити
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        seriesList = new ArrayList<Series>();
-        seriesListView = (ListView) findViewById(R.id.listView);
+        //Настраиваем List Серий
+        ArrayList<Series> seriesList = new ArrayList<Series>();
+        ListView seriesListView = (ListView) findViewById(R.id.listView);
         seriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,10 +75,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //привязываем адаптер. Пока лист пустой, в парсере будет обновление листа при добавлении каждого елемента с уведомлением об этом адаптера
+        seriesAdapter = new SeriesAdapter(this, seriesList);
+        seriesListView.setAdapter(seriesAdapter);
+
+        //Запускаем парсер
         SeriesParser seriesParser = new SeriesParser(seriesList, seriesAdapter, seriesListView, getApplicationContext());
         seriesParser.run();
 
     }
 
-
+    public void refreshList(){
+        seriesAdapter.notifyDataSetChanged();
+    }
 }

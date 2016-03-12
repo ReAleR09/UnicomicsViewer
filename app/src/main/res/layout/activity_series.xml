@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="97dp"
         android:layout_height="150dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/comics_cover"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
@@ -14,23 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/comicsListView"
-        android:layout_below="@+id/imageView2"
+        android:layout_below="@+id/comics_cover"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="serieTitleRus"
         android:id="@+id/serieTitleRus"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/comics_cover" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="serieTitleEng"
         android:id="@+id/serieTitleEng"
         android:layout_below="@+id/serieTitleRus"
         android:layout_alignParentStart="true" />
@@ -38,30 +37,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="serieDesc"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
         android:id="@+id/serieDesc"
         android:layout_below="@+id/serieTitleEng"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/comicsListView"
-        android:layout_toStartOf="@+id/imageView2" />
+        android:layout_toStartOf="@+id/comics_cover"
+        android:text="s" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="serieYear"
         android:id="@+id/serieYear"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/imageView2" />
+        android:layout_toStartOf="@+id/comics_cover" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="seriePublisher"
         android:id="@+id/seriePublisher"
         android:layout_below="@+id/serieYear"
-        android:layout_toStartOf="@+id/imageView2" />
+        android:layout_toStartOf="@+id/comics_cover" />
 
 </RelativeLayout>

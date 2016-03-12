@@ -3,22 +3,21 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="150dp">
 
-    <ImageView
-        android:layout_width="97dp"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/rt_textView"
+        android:id="@+id/number_name"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/imageView"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentEnd="false" />
+
+    <ImageView
+        android:layout_width="97dp"
+        android:layout_height="match_parent"
+        android:id="@+id/number_thumb"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

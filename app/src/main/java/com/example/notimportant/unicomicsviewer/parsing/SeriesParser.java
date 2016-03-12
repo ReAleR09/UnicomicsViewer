@@ -22,14 +22,10 @@ public class SeriesParser{
 
     private ArrayList seriesList;
     private SeriesAdapter seriesAdapter;
-    private ListView seriesListView;
-    private Context context;
 
-    public SeriesParser(ArrayList seriesList, SeriesAdapter seriesAdapter, ListView seriesListView, Context context) {
+    public SeriesParser(ArrayList seriesList, SeriesAdapter seriesAdapter) {
         this.seriesList = seriesList;
         this.seriesAdapter = seriesAdapter;
-        this.seriesListView = seriesListView;
-        this.context = context;
 
     }
 
@@ -101,7 +97,7 @@ public class SeriesParser{
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("TEST", "Сбор окончен");
+            Log.d("TEST", "Сбор списка серий окончен");
         }
     }
 

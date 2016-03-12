@@ -62,33 +62,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Настраиваем List Серий
-        final ArrayList<Series> seriesList = new ArrayList<Series>();
+        ArrayList<Series> seriesList = new ArrayList<Series>();
         ListView seriesListView = (ListView) findViewById(R.id.listView);
-        seriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO
-                //Он айтем клик, открывать окошко с описанием Серии и списком выпусков
-                Series serie = seriesList.get((int)id);
-                Intent intent = new Intent(getApplicationContext(), SeriesActivity.class);
-                intent.putExtra("title", serie.getTitle());
-                intent.putExtra("serieURL", serie.getSeriesURL());
-                startActivity(intent);
 
-            }
-        });
 
         //привязываем адаптер. Пока лист пустой, в парсере будет обновление листа при добавлении каждого елемента с уведомлением об этом адаптера
         seriesAdapter = new SeriesAdapter(this, seriesList);
         seriesListView.setAdapter(seriesAdapter);
 
+        seriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO
+                //Он айтем клик, открывать окошко с описанием Серии и списком выпусков
+                Series serie = seriesAdapter.getSeries(position);
+                Intent intent = new Intent(getApplicationContext(), SeriesActivity.class);
+                intent.putExtra("title", serie.getTitle());
+                intent.putExtra("serieURL", serie.getSeriesURL());
+                //запускам активити и передаем в него вышеуказанное
+                startActivity(intent);
+            }
+        });
+
         //Запускаем парсер
-        SeriesParser seriesParser = new SeriesParser(seriesList, seriesAdapter, seriesListView, getApplicationContext());
+        SeriesParser seriesParser = new SeriesParser(seriesList, seriesAdapter);
         seriesParser.run();
 
     }
 
-    public void refreshList(){
-        seriesAdapter.notifyDataSetChanged();
-    }
 }

@@ -14,6 +14,13 @@ public class Comics {
         this.comicsUrl = comicsUrl;
     }
 
+    public Comics(String title, String thumbUrl, String comicsUrl) {
+        this.title = title;
+        this.engTitle = "eng title lol";
+        this.thumbUrl = thumbUrl;
+        this.comicsUrl = comicsUrl;
+    }
+
     public String getTitle() {
         return title;
     }

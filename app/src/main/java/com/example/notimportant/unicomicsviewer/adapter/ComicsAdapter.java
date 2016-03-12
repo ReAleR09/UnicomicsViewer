@@ -1,5 +1,6 @@
 package com.example.notimportant.unicomicsviewer.adapter;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,19 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.notimportant.unicomicsviewer.POJO.Series;
+import com.example.notimportant.unicomicsviewer.POJO.Comics;
 import com.example.notimportant.unicomicsviewer.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-
 import java.util.ArrayList;
 
-public class SeriesAdapter extends BaseAdapter{
+public class ComicsAdapter extends BaseAdapter{
 
-    private ArrayList<Series> list;
+    private ArrayList<Comics> list;
     private LayoutInflater layoutInflater;
 
-    public SeriesAdapter(Context context, ArrayList<Series> list) {
+    public ComicsAdapter(Context context, ArrayList<Comics> list) {
         this.list = list;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -44,26 +44,21 @@ public class SeriesAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if(view == null){
-            view = layoutInflater.inflate(R.layout.serie_layout, parent, false);
+            view = layoutInflater.inflate(R.layout.comic_layout, parent, false);
         }
 
-        Series series = getSeries(position);
+        final Comics comics = getComics(position);
+        TextView name = (TextView) view.findViewById(R.id.number_name);
+        name.setText(comics.getTitle());
 
-        TextView ru_title = (TextView) view.findViewById(R.id.rt_textView);
-        ru_title.setText(series.getTitle());
+        ImageView imageView = (ImageView) view.findViewById(R.id.number_thumb);
+        ImageLoader.getInstance().displayImage(comics.getThumbUrl(), imageView);
 
-//        TextView eng_title = (TextView) view.findViewById(R.id.et_textView);
-//        eng_title.setText(series.getEngTitle());
-
-        //ОТОБРАЖАЕМ КАРТИНКУ
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-        ImageLoader.getInstance().displayImage(series.getThumbURL(), imageView);
 
         return view;
     }
 
-    public Series getSeries (int position){
-        return (Series) getItem(position);
+    public Comics getComics (int position){
+        return (Comics) getItem(position);
     }
-
 }

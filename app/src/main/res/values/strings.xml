@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Unicomics Viewer</string>
     <string name="title_activity_main">Unicomics Viewer</string>
+    <string name="title_activity_comics">Comics</string>
 </resources>

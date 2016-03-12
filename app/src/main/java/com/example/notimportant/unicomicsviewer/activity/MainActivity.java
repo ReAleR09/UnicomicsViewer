@@ -1,5 +1,6 @@
 package com.example.notimportant.unicomicsviewer.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -39,10 +40,6 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    // быдлокодные статики больше не нужны >:-)
-    //private static ArrayList<Series> seriesList;
-    //private ListView seriesListView;
-    //private static SeriesAdapter seriesAdapter;
     private SeriesAdapter seriesAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +62,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Настраиваем List Серий
-        ArrayList<Series> seriesList = new ArrayList<Series>();
+        final ArrayList<Series> seriesList = new ArrayList<Series>();
         ListView seriesListView = (ListView) findViewById(R.id.listView);
         seriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO
                 //Он айтем клик, открывать окошко с описанием Серии и списком выпусков
+                Series serie = seriesList.get((int)id);
+                Intent intent = new Intent(getApplicationContext(), SeriesActivity.class);
+                intent.putExtra("title", serie.getTitle());
+                intent.putExtra("serieURL", serie.getSeriesURL());
+                startActivity(intent);
+
             }
         });
 

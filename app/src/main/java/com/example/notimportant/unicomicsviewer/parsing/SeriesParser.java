@@ -2,7 +2,6 @@ package com.example.notimportant.unicomicsviewer.parsing;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -19,9 +18,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by notimportant on 09.03.16.
- */
 public class SeriesParser{
 
     private ArrayList seriesList;
@@ -53,7 +49,6 @@ public class SeriesParser{
                 //получаем строчку с вызовом скрипта генерации пагинации
                 Element pag = doc.getElementsByClass("pagination").first().getElementsByTag("script").first();
                 String pagination = pag.data();
-                //Log.d("TEST", pagination);
                 //получаем количество страниц
                 Pattern tp = Pattern.compile("^.*?', (.*?), .*$");
                 Matcher tm = tp.matcher(pagination);
@@ -76,12 +71,9 @@ public class SeriesParser{
                             //TODO
                             //гетать eng-title
                             String seriesURL = serie_element.getElementsByClass("list_h").first().attr("href");
-                            Log.d("TEST", thumbURL);
-
                             Series serie = new Series(title, " ", thumbURL, seriesURL);
 
-                            //TODO
-                            //попробвать апдейтить список в прямом эфире seriesAdapter.notifyDataSetChanged();
+                            //отправляем объект в UI поток для обновления списка
                             publishProgress(serie);
 
                         }
@@ -103,16 +95,13 @@ public class SeriesParser{
             super.onProgressUpdate(values);
             //засовываем в лист
             seriesList.add(values[0]);
+            //сообщаем адаптеру, чтобы он обновил список
             seriesAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected void onPostExecute(String result) {
-            //привязать адаптер к листу
             Log.d("TEST", "Сбор окончен");
-            // переехало в onCreate пока что
-            //seriesAdapter = new SeriesAdapter(context, seriesList);
-            //seriesListView.setAdapter(seriesAdapter);
         }
     }
 

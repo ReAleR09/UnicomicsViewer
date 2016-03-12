@@ -1,10 +1,5 @@
 package com.example.notimportant.unicomicsviewer.POJO;
 
-import android.graphics.Bitmap;
-
-/**
- * Created by NotimPortant on 20.02.2016.
- */
 public class Series {
     private String title;
     private String engTitle;
